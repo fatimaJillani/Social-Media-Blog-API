@@ -2,51 +2,47 @@ package DAO;
 
 import java.sql.*;
 
-
 import Model.Account;
+import Util.ConnectionUtil;
 
 public class AccountDAO {
     private Connection connection;
 
-    public AccountDAO(){
-        //initialize database connection
-        try {
-            connection = DriverManager.getConnection("jdbc:mysql://localhost:8080/mydatabase", "username", "password");
-        } catch (SQLException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+     // check if account already exists
+     // return account when needed
+     // get account by userName and password
+    public Account getAccountByUsernameAndPassword(String username, String password) throws SQLException{
+        connection = ConnectionUtil.getConnection();
+
+        String sql = "SELECT * FROM account WHERE username = ? AND password = ?";
+        PreparedStatement statement1 = connection.prepareStatement(sql);
+
+        statement1.setString(1,username);
+        statement1.setString(2, password);
+
+        ResultSet rs = statement1.executeQuery();
+        if (rs.next()){
+            Account account = new Account(rs.getInt("account_id"),
+                             rs.getString("username"),
+                             rs.getString("password"));
+                    
+            return account;
         }
+        return null;
+
     }
 
     //Create new account
 
     public Account createNewAccount(Account account) throws SQLException{
-        //validate username. It should not be blank
-        if(account.getUsername().equals("") ||account.getPassword().length() <4){
-            throw new IllegalArgumentException("Username can not be blank");
-        }
 
-        //validate password. it miust be more than 4 characters long
-        if(account.getPassword().length()< 4){
-            throw new IllegalArgumentException("Password can not be less than 4 characters");
-        }
-
-        // check if account already exists
-
-        String sql = "Select * FROM account WHERE username = ?";
-        PreparedStatement statement1 = connection.prepareStatement(sql);
-
-        statement1.setString(1,account.getUsername());
-
-        ResultSet rs = statement1.executeQuery();
-        if (rs.next()){
-            throw new IllegalArgumentException("Account already exists");
-        }
+        //connect to the database
+         connection = ConnectionUtil.getConnection(); 
 
         //insert account into accounts table
-        String sql2 = "INSERT INTO account(username, password) VALUES(?,?)";
+        String sql2 = "INSERT INTO account(username, password) VALUES(?, ?)";
 
-        PreparedStatement statement2 = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+        PreparedStatement statement2 = connection.prepareStatement(sql2, Statement.RETURN_GENERATED_KEYS);
         statement2.setString(1, account.getUsername());
         statement2.setString(2, account.getPassword());
         statement2.executeUpdate();
@@ -57,12 +53,33 @@ public class AccountDAO {
         if(generatedKeys.next()){
             account.setAccount_id(generatedKeys.getInt(1));
         }
-
-        statement1.close();
-        statement2.close();
         return account;
 
 
     }
-    
+
+    //get acount by id
+    public Account getAccountById(int accountId) throws SQLException {
+    connection = ConnectionUtil.getConnection();
+
+     String sql = "SELECT * FROM account WHERE account_id = ?";
+     PreparedStatement statement = connection.prepareStatement(sql);
+ 
+     statement.setInt(1, accountId);
+ 
+     ResultSet rs = statement.executeQuery();
+        if (rs.next()) {
+           Account account = new Account(rs.getInt("account_id"),
+                   rs.getString("username"),
+                   rs.getString("password"));
+   
+                   return account;
+        }
+
+        
+        return null;
+    }
+
+
+ 
 }
