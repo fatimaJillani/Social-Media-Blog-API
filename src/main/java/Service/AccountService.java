@@ -34,7 +34,7 @@ public class AccountService {
    }
  
    public Account authenticateUser(String username, String password) throws SQLException{
-      //return  account back to user after successful registration
+      //return  account back to the user after successful registration
       Account user = accountDAO.getAccountByUsernameAndPassword(username, password);
       return user;
    }
