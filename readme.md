@@ -1,3 +1,35 @@
+# Social Media Blog Backend
+
+## Project Overview
+
+This project entails the development of a robust backend for a social media blog using Java OOP, Test Driven Development, Javalin, and MySQL. The REST API allows users to create personalized accounts, perform CRUD operations on messages and posts, and ensures a secure and functional user experience.
+
+## Features Implemented
+
+- **User Account Management:** Create personalized accounts with unique usernames.
+  
+- **CRUD Operations on Messages and Posts:** Users can delete or retrieve messages by ID, update message text, and retrieve all messages associated with a user.
+
+## Technologies Used
+
+- **Java OOP:**
+  
+- **Test Driven Development (TDD):**
+  
+- **Javalin Framework:**
+  
+- **MySQL:**
+  
+
+## Usage
+
+The API provides endpoints for user account management and CRUD operations on messages and posts.
+
+## Contributors
+
+- [Fatima Jillani](https://github.com/fatimaJillani)
+
+
 # Project: Social media blog API
 
 ## Background 
